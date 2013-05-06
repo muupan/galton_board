@@ -6,11 +6,23 @@ public class BoardController : MonoBehaviour {
 
 	public int holeCount;
 	public Transform wallPrefab;
+	public Transform pinPrefab;
 	
 	private List<GameObject> walls;
+	private List<GameObject> pins;
 
 	// Use this for initialization
 	void Start () {
+		instantiateWalls();
+		instantiatePins ();
+	}
+	
+	// Update is called once per frame
+	void Update () {
+	
+	}
+	
+	private void instantiateWalls() {
 		walls = new List<GameObject>();
 		var wallCount = holeCount - 1;
 		var wallWidth = 0.1f;
@@ -24,8 +36,14 @@ public class BoardController : MonoBehaviour {
 		}
 	}
 	
-	// Update is called once per frame
-	void Update () {
-	
+	private void instantiatePins() {
+		pins = new List<GameObject>();
+		foreach (var wall in walls) {
+			var pin = ((Transform) Instantiate(pinPrefab)).gameObject;
+			pin.transform.localPosition = new Vector3(wall.transform.localPosition.x, 0f, 1f);
+//			pin.transform.localScale = Vector3.one;
+			pins.Add(wall);
+		}
+		
 	}
 }
