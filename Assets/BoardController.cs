@@ -13,8 +13,7 @@ public class BoardController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		instantiateWalls();
-		instantiatePins ();
+		InstantiateObjects();
 	}
 	
 	// Update is called once per frame
@@ -22,28 +21,36 @@ public class BoardController : MonoBehaviour {
 	
 	}
 	
-	private void instantiateWalls() {
-		walls = new List<GameObject>();
+	private void InstantiateObjects() {
 		var wallCount = holeCount - 1;
 		var wallWidth = 0.1f;
 		var spaceForHole = (19f - wallWidth * wallCount) / holeCount;
 		var xInterval = spaceForHole + wallWidth;
+		var xOffset = 9.5f - spaceForHole - 0.05f;
+		InstantiateWalls(xOffset, xInterval);
+		InstantiatePins(xOffset, xInterval);
+	}
+	
+	private void InstantiateWalls(float xOffset, float xInterval) {
+		walls = new List<GameObject>();
+		var wallCount = holeCount - 1;
 		for (var i = 0; i < wallCount; ++i) {
+			var x = xOffset - xInterval * i;
 			var wall = ((Transform) Instantiate(wallPrefab)).gameObject;
-			wall.transform.localPosition = new Vector3(9.5f - spaceForHole - 0.05f - xInterval * i, -10f, 1f);
+			wall.transform.localPosition = new Vector3(x, -10f, 1f);
 			wall.transform.localScale = new Vector3(0.1f, 9f, 1f);
 			walls.Add(wall);
 		}
 	}
 	
-	private void instantiatePins() {
+	private void InstantiatePins(float xOffset, float xInterval) {
 		pins = new List<GameObject>();
-		foreach (var wall in walls) {
+		var pinCount = holeCount - 1;
+		for (var i = 0; i < pinCount; ++i) {
+			var x = xOffset - xInterval * i;
 			var pin = ((Transform) Instantiate(pinPrefab)).gameObject;
-			pin.transform.localPosition = new Vector3(wall.transform.localPosition.x, 0f, 1f);
-//			pin.transform.localScale = Vector3.one;
-			pins.Add(wall);
+			pin.transform.localPosition = new Vector3(x, 0f, 1f);
+			pins.Add(pin);
 		}
-		
 	}
 }
